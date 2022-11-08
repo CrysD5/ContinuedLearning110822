@@ -1,27 +1,38 @@
 ﻿using System;
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
 using ContinuedLearning110822.Models;
+using ContinuedLearning110822.Data;
 
 namespace ContinuedLearning110822.Controllers
 {
 	public partial class GridController : Controller
     {
-		public ActionResult Orders_Read([DataSourceRequest]DataSourceRequest request)
-		{
-			var result = Enumerable.Range(0, 50).Select(i => new OrderViewModel
-			{
-				OrderID = i,
-				Freight = i * 10,
-				OrderDate = DateTime.Now.AddDays(i),
-				ShipName = "ShipName " + i,
-				ShipCity = "ShipCity " + i
-			});
+        private readonly Data.NorthwindEntities _northwindEntities = new NorthwindEntities();
 
-			return Json(result.ToDataSourceResult(request));
-		}
-	}
+        
+
+        public ActionResult GetCustomers([DataSourceRequest] DataSourceRequest request)
+        {
+            var result = _northwindEntities.Customers.Select(c=> new CustomerModel()
+            {
+                CustomerID = c.CustomerID,
+                CustomerName = c.CustomerName,
+                ContactName = c.ContactName,
+                Address = c.Address,
+                City = c.City,
+                Country = c.Country,
+                PostalCode = c.PostalCode
+            });
+
+
+            return Json(result.ToDataSourceResult(request));
+        }
+
+
+    }
 }

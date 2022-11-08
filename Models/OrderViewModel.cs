@@ -67,5 +67,6 @@ namespace ContinuedLearning110822.Models
             get;
             set;
         }
+        public int? ProductID { get; internal set; }
     }
 }
